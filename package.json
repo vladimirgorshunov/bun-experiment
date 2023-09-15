@@ -7,7 +7,13 @@
     "db:push": "dotenv drizzle-kit push:mysql",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
@@ -37,6 +43,8 @@
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.47.0",
     "eslint-config-next": "^13.4.19",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "typescript": "^5.1.6"
   },

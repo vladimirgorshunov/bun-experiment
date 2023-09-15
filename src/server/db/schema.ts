@@ -2,8 +2,11 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
+
 import {
   bigint,
+  char,
   mysqlTableCreator,
   timestamp,
   uniqueIndex,
@@ -16,19 +19,23 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const mysqlTable = mysqlTableCreator((name) => `bun-startup-project_${name}`);
+export const mysqlTable = mysqlTableCreator(
+  (name) => `bun-startup-project_${name}`,
+);
 
-export const example = mysqlTable(
-  "example",
+export const posts = mysqlTable(
+  "posts",
   {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
+    id: char("id", { length: 25 })
+      .primaryKey()
+      .$defaultFn(() => nanoid(25)),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
+    content: varchar("content", { length: 256 }),
+    authorId: char("author_id", { length: 25 }).notNull(),
   },
-  (example) => ({
-    nameIndex: uniqueIndex("name_idx").on(example.name),
-  })
+  (post) => ({
+    authorIdIndex: uniqueIndex("author_id_index").on(post.authorId),
+  }),
 );
